@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 900px;
+                 background-color: #0a0a12;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FF00FF", "font": {"color": "#e0e0ff"}, "id": "central", "label": "tqn9y2khesljw1chvwfmsmerdow5kcblse", "shape": "star", "size": 45, "title": "Cible : tqn9y2khesljw1chvwfmsmerdow5kcblse"}, {"color": "#FFD21E", "font": {"color": "#e0e0ff"}, "id": "source_HuggingFace", "label": "HuggingFace", "shape": "ellipse", "size": 30, "title": "{\u0027models\u0027: [], \u0027datasets\u0027: [], \u0027spaces\u0027: []}"}, {"color": "#CB3837", "font": {"color": "#e0e0ff"}, "id": "source_npm", "label": "npm", "shape": "ellipse", "size": 30, "title": "{\u0027packages\u0027: [], \u0027total_packages\u0027: 0}"}, {"color": "#FF6F21", "font": {"color": "#e0e0ff"}, "id": "source_Keybase", "label": "Keybase", "shape": "ellipse", "size": 30, "title": "{\u0027basics\u0027: {\u0027username\u0027: None, \u0027ctime\u0027: None, \u0027uid\u0027: None}, \u0027profile\u0027: {\u0027full_name\u0027: None, \u0027location\u0027: None, \u0027bio\u0027: None}, \u0027proofs\u0027: []}"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_1", "label": "basics", "shape": "dot", "size": 18, "title": "basics\n{\u0027username\u0027: None, \u0027ctime\u0027: None, \u0027uid\u0027: None}"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_2", "label": "profile", "shape": "dot", "size": 18, "title": "profile\n{\u0027full_name\u0027: None, \u0027location\u0027: None, \u0027bio\u0027: None}"}, {"color": "#00BFFF", "font": {"color": "#e0e0ff"}, "id": "source_Social", "label": "Social", "shape": "ellipse", "size": 30, "title": "{\u0027confirmed\u0027: [{\u0027platform\u0027: \u0027Instagram\u0027, \u0027url\u0027: \u0027https://www.instagram.com/tqn9y2khesljw1chvwfmsmerdow5kcblse/\u0027, \u0027status\u0027: \u0027EXISTS\u0027}, {\u0027platform\u0027: \u0027TikTok\u0027, \u0027url\u0027: \u0027https://www.tiktok.com/@tqn9y2khesljw1chvwfmsmerdow5kcblse\u0027, \u0027status\u0027: \u0027EXISTS\u0027}, {\u0027platform\u0027: \u0027Pinterest\u0027, \u0027url\u0027: \u0027https://www.pinterest.com/tqn9y2khesljw1chvwfmsmerdow5kcblse/\u0027, \u0027status\u0027: \u0027EXISTS\u0027}, {\u0027platform\u0027: \u0027YouTube\u0027, \u0027url\u0027: \u0027https://www.youtube.com/@tqn9y2khesljw1chvwfmsmerdow5kcblse\u0027, \u0027status\u0027: \u0027EXISTS\u0027}, {\u0027platform\u0027: \u0027Stack"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_3", "label": "confirmed", "shape": "dot", "size": 18, "title": "confirmed\n[{\u0027platform\u0027: \u0027Instagram\u0027, \u0027url\u0027: \u0027https://www.instagram.com/tqn9y2khesljw1chvwfmsmerdow5kcblse/\u0027, \u0027status\u0027: \u0027EXISTS\u0027}, {\u0027platform\u0027: \u0027TikTok\u0027, \u0027url\u0027: \u0027https://www.tiktok.com/@tqn9y2khesljw1chvwfmsmerdow5kcblse\u0027, \u0027status\u0027"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_4", "label": "possible", "shape": "dot", "size": 18, "title": "possible\n[{\u0027platform\u0027: \u0027Twitter/X\u0027, \u0027url\u0027: \u0027https://twitter.com/tqn9y2khesljw1chvwfmsmerdow5kcblse\u0027, \u0027status\u0027: 403}, {\u0027platform\u0027: \u0027LinkedIn\u0027, \u0027url\u0027: \u0027https://www.linkedin.com/in/tqn9y2khesljw1chvwfmsmerdow5kcblse\u0027, \u0027status\u0027: 999}"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_5", "label": "generated_usernames", "shape": "dot", "size": 18, "title": "generated_usernames\n[\u0027tqn9y2khesljw1chvwfmsmerdow5kcblse\u0027, \u0027tqn9y2khesljw1chvwfmsmerdow5kcblseeth\u0027, \u0027tqn9y2khesljw1chvwfmsmerdow5kcblse_dev\u0027, \u0027tqn9y2khesljw1chvwfmsmerdow5kcblseai\u0027]"}, {"color": "#3399FF", "font": {"color": "#e0e0ff"}, "id": "source_Telegram", "label": "Telegram", "shape": "ellipse", "size": 30, "title": "{\u0027username\u0027: \u0027tqn9y2khesljw1chvwfmsmerdow5kcblse\u0027, \u0027exists\u0027: True, \u0027display_name\u0027: \u0027Telegram \u2013 a new era of messaging\u0027, \u0027bio\u0027: \u0027Fast. Secure. Powerful.\u0027, \u0027avatar\u0027: \u0027https://telegram.org/img/t_logo_2x.png\u0027, \u0027url\u0027: \u0027https://t.me/tqn9y2khesljw1chvwfmsmerdow5kcblse\u0027}"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_6", "label": "username", "shape": "dot", "size": 18, "title": "username\ntqn9y2khesljw1chvwfmsmerdow5kcblse"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_7", "label": "exists", "shape": "dot", "size": 18, "title": "exists\nTrue"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_8", "label": "display_name", "shape": "dot", "size": 18, "title": "display_name\nTelegram \u2013 a new era of messaging"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_9", "label": "bio", "shape": "dot", "size": 18, "title": "bio\nFast. Secure. Powerful."}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_10", "label": "avatar", "shape": "dot", "size": 18, "title": "avatar\nhttps://telegram.org/img/t_logo_2x.png"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_11", "label": "url", "shape": "dot", "size": 18, "title": "url\nhttps://t.me/tqn9y2khesljw1chvwfmsmerdow5kcblse"}, {"color": "#3399FF", "font": {"color": "#e0e0ff"}, "id": "source_Discord", "label": "Discord", "shape": "ellipse", "size": 30, "title": "{\u0027username\u0027: \u0027tqn9y2khesljw1chvwfmsmerdow5kcblse\u0027}"}, {"color": "#22FFAA", "font": {"color": "#e0e0ff"}, "id": "d_12", "label": "username", "shape": "dot", "size": 18, "title": "username\ntqn9y2khesljw1chvwfmsmerdow5kcblse"}]);
+                  edges = new vis.DataSet([{"color": "#555555", "from": "central", "to": "source_HuggingFace"}, {"color": "#555555", "from": "central", "to": "source_npm"}, {"color": "#555555", "from": "central", "to": "source_Keybase"}, {"color": "#336644", "from": "source_Keybase", "to": "d_1"}, {"color": "#336644", "from": "source_Keybase", "to": "d_2"}, {"color": "#555555", "from": "central", "to": "source_Social"}, {"color": "#336644", "from": "source_Social", "to": "d_3"}, {"color": "#336644", "from": "source_Social", "to": "d_4"}, {"color": "#336644", "from": "source_Social", "to": "d_5"}, {"color": "#555555", "from": "central", "to": "source_Telegram"}, {"color": "#336644", "from": "source_Telegram", "to": "d_6"}, {"color": "#336644", "from": "source_Telegram", "to": "d_7"}, {"color": "#336644", "from": "source_Telegram", "to": "d_8"}, {"color": "#336644", "from": "source_Telegram", "to": "d_9"}, {"color": "#336644", "from": "source_Telegram", "to": "d_10"}, {"color": "#336644", "from": "source_Telegram", "to": "d_11"}, {"color": "#555555", "from": "central", "to": "source_Discord"}, {"color": "#336644", "from": "source_Discord", "to": "d_12"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"physics": {"barnesHut": {"gravitationalConstant": -14000, "centralGravity": 0.3, "springLength": 180}, "stabilization": {"iterations": 1500}}, "nodes": {"font": {"size": 13}}, "edges": {"smooth": {"type": "continuous"}}, "interaction": {"hover": true, "tooltipDelay": 150}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
